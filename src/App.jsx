@@ -112,7 +112,7 @@ function Sparkline({ data, width = 120, height = 34, color = '#10384f' }) {
     })
     .join(' ');
   return (
-    <svg width={width} height={height} className="spark">
+    <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="none" className="spark">
       <line x1="0" x2={width} y1={height - ((0.8 - min) / (max - min)) * height} y2={height - ((0.8 - min) / (max - min)) * height} className="spark-target" />
       <polyline points={pts} fill="none" stroke={color} strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" />
     </svg>

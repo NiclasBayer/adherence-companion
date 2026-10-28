@@ -187,3 +187,41 @@ button { font: inherit; cursor: pointer; }
   .dash-grid { grid-template-columns: 1fr; }
   .dash-kpis { grid-template-columns: repeat(2, 1fr); }
 }
+
+/* Mobile */
+@media (max-width: 760px) {
+  .app { padding: 10px 10px 20px; }
+  .top { flex-direction: column; align-items: stretch; gap: 12px; padding: 12px 14px; border-radius: 14px; }
+  .brand-name { font-size: 20px; }
+  .brand-sub { font-size: 12px; }
+  .top-right { flex-wrap: wrap; gap: 8px; }
+  .top .btn.ghost { margin-left: auto; padding: 7px 11px; font-size: 13px; }
+
+  .stage, .dash-grid { grid-template-columns: minmax(0, 1fr); }
+  .stage > *, .dash-grid > *, .dash > * { min-width: 0; }
+  .dash-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .stage { gap: 18px; margin-top: 14px; }
+  .phone { width: 100%; max-width: 370px; height: 740px; border-radius: 44px; padding: 10px; }
+  .phone-notch { top: 10px; }
+  .phone-screen { border-radius: 36px; padding: 12px 14px 16px; }
+
+  .dash { gap: 12px; }
+  .dash-kpis { gap: 10px; }
+  .d-kpi { padding: 11px 12px; }
+  .d-kpi span { font-size: 11px; letter-spacing: 0.4px; }
+  .d-kpi b { font-size: 26px; }
+  .dash-grid { gap: 12px; }
+  .card { padding: 14px 12px; border-radius: 14px; }
+
+  /* Tabelle: Diagnose ausblenden, Trend schmaler */
+  .tbl th:nth-child(2), .tbl td:nth-child(2) { display: none; }
+  .tbl th, .tbl td { padding-left: 5px; padding-right: 5px; }
+  .tbl .spark { width: 70px; }
+  .who { gap: 7px; }
+  .who-av { width: 28px; height: 28px; font-size: 11px; }
+  .who b { font-size: 13px; }
+  .risk { padding: 3px 7px; font-size: 11px; }
+
+  .det-stats b { font-size: 17px; }
+  .heat { gap: 3px; }
+}
