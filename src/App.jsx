@@ -9,26 +9,29 @@ import React, { useMemo, useState } from 'react';
 const DAYS = 28;
 const SLOTS = { morning: '08:00', midday: '13:00', evening: '20:00' };
 
-const MAYA_MEDS = [
-  { id: 'asa', name: 'Aspirin', dose: '100 mg', slot: 'morning', purpose: 'Keeps blood from clotting', color: '#e8b80e' },
-  { id: 'ticag', name: 'Ticagrelor', dose: '90 mg', slot: 'morning', purpose: 'Protects your new stent', color: '#00bcff' },
-  { id: 'bb', name: 'Bisoprolol', dose: '2.5 mg', slot: 'morning', purpose: 'Calms the heart rate', color: '#89d329' },
-  { id: 'ticag2', name: 'Ticagrelor', dose: '90 mg', slot: 'evening', purpose: 'Protects your new stent', color: '#00bcff' },
-  { id: 'statin', name: 'Atorvastatin', dose: '80 mg', slot: 'evening', purpose: 'Lowers cholesterol', color: '#d30f4b' },
+// Placeholder names only: no real medications, no real people.
+const MEDS = [
+  { id: 'medA', name: 'Medication A', dose: '1 tablet', slot: 'morning', purpose: 'Keeps blood from clotting', color: '#e8b80e' },
+  { id: 'medB', name: 'Medication B', dose: '1 tablet', slot: 'morning', purpose: 'Protects your new stent', color: '#00bcff' },
+  { id: 'medC', name: 'Medication C', dose: '1 tablet', slot: 'morning', purpose: 'Calms the heart rate', color: '#89d329' },
+  { id: 'medB2', name: 'Medication B', dose: '1 tablet', slot: 'evening', purpose: 'Protects your new stent', color: '#00bcff' },
+  { id: 'medD', name: 'Medication D', dose: '1 tablet', slot: 'evening', purpose: 'Lowers cholesterol', color: '#d30f4b' },
 ];
 
 const REASONS = ['Forgot', 'Felt dizzy', 'Side effects', 'Ran out', 'Felt fine'];
 
 const PATIENTS = [
-  { id: 'p1', name: 'Maya K.', age: 58, condition: 'Heart attack, stent', since: 31, base: 0.93, trend: 0, late: 1 },
-  { id: 'p2', name: 'Thomas B.', age: 64, condition: 'Heart failure', since: 120, base: 0.62, trend: -0.012, late: 3, reason: 'Side effects' },
-  { id: 'p3', name: 'Aylin D.', age: 47, condition: 'Hypertension', since: 64, base: 0.9, trend: 0.002, late: 2 },
-  { id: 'p4', name: 'Robert F.', age: 71, condition: 'Atrial fibrillation', since: 210, base: 0.79, trend: -0.008, late: 5, reason: 'Forgot' },
-  { id: 'p5', name: 'Elena S.', age: 53, condition: 'Type 2 diabetes', since: 44, base: 0.97, trend: 0, late: 0 },
-  { id: 'p6', name: 'Jonas W.', age: 39, condition: 'After bypass surgery', since: 12, base: 0.83, trend: -0.006, late: 2, reason: 'Ran out' },
-  { id: 'p7', name: 'Grace O.', age: 67, condition: 'Hypertension', since: 300, base: 0.71, trend: 0.004, late: 4, reason: 'Felt fine' },
-  { id: 'p8', name: 'Peter L.', age: 60, condition: 'Heart attack, stent', since: 90, base: 0.95, trend: 0, late: 1 },
+  { id: 'p1', name: 'Patient A', age: 58, condition: 'Heart attack, stent', since: 31, base: 0.93, trend: 0, late: 1 },
+  { id: 'p2', name: 'Patient B', age: 64, condition: 'Heart failure', since: 120, base: 0.62, trend: -0.012, late: 3, reason: 'Side effects' },
+  { id: 'p3', name: 'Patient C', age: 47, condition: 'Hypertension', since: 64, base: 0.9, trend: 0.002, late: 2 },
+  { id: 'p4', name: 'Patient D', age: 71, condition: 'Atrial fibrillation', since: 210, base: 0.79, trend: -0.008, late: 5, reason: 'Forgot' },
+  { id: 'p5', name: 'Patient E', age: 53, condition: 'Type 2 diabetes', since: 44, base: 0.97, trend: 0, late: 0 },
+  { id: 'p6', name: 'Patient F', age: 39, condition: 'After bypass surgery', since: 12, base: 0.83, trend: -0.006, late: 2, reason: 'Ran out' },
+  { id: 'p7', name: 'Patient G', age: 67, condition: 'Hypertension', since: 300, base: 0.71, trend: 0.004, late: 4, reason: 'Felt fine' },
+  { id: 'p8', name: 'Patient H', age: 60, condition: 'Heart attack, stent', since: 90, base: 0.95, trend: 0, late: 1 },
 ];
+
+const initials = (name) => name.split(' ').map((s) => s[0]).join('');
 
 function mulberry32(seed) {
   let a = seed;
@@ -136,8 +139,8 @@ function Heatmap({ days }) {
 
 function Phone({ doses, onTake, onSkip, streak, todayShare, weekShare, onReminder, toast }) {
   const [askFor, setAskFor] = useState(null);
-  const bySlot = Object.keys(SLOTS).map((slot) => ({ slot, items: MAYA_MEDS.filter((m) => m.slot === slot) })).filter((g) => g.items.length);
-  const remaining = MAYA_MEDS.filter((m) => !doses[m.id]).length;
+  const bySlot = Object.keys(SLOTS).map((slot) => ({ slot, items: MEDS.filter((m) => m.slot === slot) })).filter((g) => g.items.length);
+  const remaining = MEDS.filter((m) => !doses[m.id]).length;
 
   return (
     <div className="phone">
@@ -150,14 +153,14 @@ function Phone({ doses, onTake, onSkip, streak, todayShare, weekShare, onReminde
 
         <div className="p-head">
           <div>
-            <div className="p-hello">Good morning, Maya</div>
+            <div className="p-hello">Good morning, Patient A</div>
             <div className="p-date">Day 31 after your heart attack</div>
           </div>
-          <div className="p-avatar">MK</div>
+          <div className="p-avatar">PA</div>
         </div>
 
         <div className="p-hero">
-          <Ring value={todayShare} label={`${MAYA_MEDS.length - remaining}/${MAYA_MEDS.length}`} sub="taken today" />
+          <Ring value={todayShare} label={`${MEDS.length - remaining}/${MEDS.length}`} sub="taken today" />
           <div className="p-hero-side">
             <div className="p-streak">
               <span className="flame">🔥</span>
@@ -244,7 +247,7 @@ function Phone({ doses, onTake, onSkip, streak, todayShare, weekShare, onReminde
 // Care team dashboard
 // ---------------------------------------------------------------------------
 
-function Dashboard({ rows, selected, onSelect, mayaToday, events }) {
+function Dashboard({ rows, selected, onSelect, patientAToday, events }) {
   const avg = rows.reduce((a, r) => a + r.avg, 0) / rows.length;
   const atRisk = rows.filter((r) => r.risk === 'high').length;
   const onTarget = rows.filter((r) => r.last7 >= 0.8).length;
@@ -269,8 +272,8 @@ function Dashboard({ rows, selected, onSelect, mayaToday, events }) {
           <small>adherence dropping</small>
         </div>
         <div className="d-kpi">
-          <span>Maya today</span>
-          <b>{mayaToday}</b>
+          <span>Patient A today</span>
+          <b>{patientAToday}</b>
           <small>doses confirmed</small>
         </div>
       </div>
@@ -296,7 +299,7 @@ function Dashboard({ rows, selected, onSelect, mayaToday, events }) {
                 <tr key={r.p.id} className={r.p.id === sel.p.id ? 'sel' : ''} onClick={() => onSelect(r.p.id)}>
                   <td>
                     <div className="who">
-                      <span className="who-av">{r.p.name.split(' ').map((s) => s[0]).join('')}</span>
+                      <span className="who-av">{initials(r.p.name)}</span>
                       <div>
                         <b>{r.p.name}</b>
                         <small>{r.p.age} years</small>
@@ -338,7 +341,7 @@ function Dashboard({ rows, selected, onSelect, mayaToday, events }) {
           <div className="det-label">Suggested next step</div>
           <div className={`next ${sel.risk}`}>
             {sel.risk === 'high' && (
-              <>Call {sel.p.name.split(' ')[0]} this week. Most common reason given: <b>{sel.p.reason || 'none recorded'}</b>. Consider a simpler dosing plan.</>
+              <>Call {sel.p.name} this week. Most common reason given: <b>{sel.p.reason || 'none recorded'}</b>. Consider a simpler dosing plan.</>
             )}
             {sel.risk === 'medium' && (
               <>Send an encouragement message and check refill dates. Reason given: <b>{sel.p.reason || 'none recorded'}</b>.</>
@@ -367,20 +370,20 @@ function Dashboard({ rows, selected, onSelect, mayaToday, events }) {
 // ---------------------------------------------------------------------------
 
 export default function App() {
-  const [doses, setDoses] = useState({ asa: { type: 'taken', at: '08:04' } });
+  const [doses, setDoses] = useState({ medA: { type: 'taken', at: '08:04' } });
   const [selected, setSelected] = useState('p2');
   const [events, setEvents] = useState([
-    { at: '08:12', text: 'Peter L. took all morning medication', kind: 'ok' },
-    { at: '08:04', text: 'Maya K. took Aspirin 100 mg', kind: 'ok' },
-    { at: '07:58', text: 'Thomas B. skipped Sacubitril: Side effects', kind: 'warn' },
-    { at: '07:31', text: 'Robert F. missed evening dose yesterday', kind: 'warn' },
+    { at: '08:12', text: 'Patient H took all morning medication', kind: 'ok' },
+    { at: '08:04', text: 'Patient A took Medication A', kind: 'ok' },
+    { at: '07:58', text: 'Patient B skipped Medication E: Side effects', kind: 'warn' },
+    { at: '07:31', text: 'Patient D missed evening dose yesterday', kind: 'warn' },
   ]);
   const [toast, setToast] = useState(null);
   const [clock, setClock] = useState(9 * 60 + 41);
 
   const histories = useMemo(() => PATIENTS.map((p, i) => buildHistory(p, 11 + i * 7)), []);
 
-  const todayShare = MAYA_MEDS.filter((m) => doses[m.id]?.type === 'taken').length / MAYA_MEDS.length;
+  const todayShare = MEDS.filter((m) => doses[m.id]?.type === 'taken').length / MEDS.length;
 
   const rows = useMemo(() => {
     const order = { high: 0, medium: 1, low: 2 };
@@ -393,7 +396,7 @@ export default function App() {
     }).sort((a, b) => order[a.risk] - order[b.risk] || a.last7 - b.last7);
   }, [histories, todayShare]);
 
-  const maya = rows.find((r) => r.p.id === 'p1');
+  const patientA = rows.find((r) => r.p.id === 'p1');
   const streak = 12 + (todayShare === 1 ? 1 : 0);
 
   function stamp() {
@@ -409,31 +412,31 @@ export default function App() {
 
   function take(id) {
     const at = stamp();
-    const med = MAYA_MEDS.find((m) => m.id === id);
+    const med = MEDS.find((m) => m.id === id);
     setDoses((d) => {
       const next = { ...d, [id]: { type: 'taken', at } };
-      const all = MAYA_MEDS.every((m) => next[m.id]?.type === 'taken');
+      const all = MEDS.every((m) => next[m.id]?.type === 'taken');
       flash(all ? 'All done for today. Great job!' : `${med.name} confirmed`);
       return next;
     });
-    setEvents((e) => [{ at, text: `Maya K. took ${med.name} ${med.dose}`, kind: 'ok' }, ...e].slice(0, 8));
+    setEvents((e) => [{ at, text: `Patient A took ${med.name}`, kind: 'ok' }, ...e].slice(0, 8));
   }
 
   function skip(id, reason) {
     const at = stamp();
-    const med = MAYA_MEDS.find((m) => m.id === id);
+    const med = MEDS.find((m) => m.id === id);
     setDoses((d) => ({ ...d, [id]: { type: 'skipped', reason, at } }));
-    setEvents((e) => [{ at, text: `Maya K. skipped ${med.name}: ${reason}`, kind: 'warn' }, ...e].slice(0, 8));
+    setEvents((e) => [{ at, text: `Patient A skipped ${med.name}: ${reason}`, kind: 'warn' }, ...e].slice(0, 8));
     flash('Your care team has been informed');
   }
 
   function reminder() {
     flash('Reminder set for 20:00');
-    setEvents((e) => [{ at: stamp(), text: 'Maya K. set an evening reminder', kind: 'info' }, ...e].slice(0, 8));
+    setEvents((e) => [{ at: stamp(), text: 'Patient A set an evening reminder', kind: 'info' }, ...e].slice(0, 8));
   }
 
   function reset() {
-    setDoses({ asa: { type: 'taken', at: '08:04' } });
+    setDoses({ medA: { type: 'taken', at: '08:04' } });
     setClock(9 * 60 + 41);
     setEvents((e) => e.slice(-4));
   }
@@ -469,7 +472,7 @@ export default function App() {
             onReminder={reminder}
             streak={streak}
             todayShare={todayShare}
-            weekShare={maya ? maya.last7 : 0.9}
+            weekShare={patientA ? patientA.last7 : 0.9}
             toast={toast}
           />
           <div className="phone-caption">What the patient sees</div>
@@ -479,7 +482,7 @@ export default function App() {
             rows={rows}
             selected={selected}
             onSelect={setSelected}
-            mayaToday={`${MAYA_MEDS.filter((m) => doses[m.id]?.type === 'taken').length}/${MAYA_MEDS.length}`}
+            patientAToday={`${MEDS.filter((m) => doses[m.id]?.type === 'taken').length}/${MEDS.length}`}
             events={events}
           />
         </div>
